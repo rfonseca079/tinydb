@@ -424,6 +424,56 @@ class Table:
 
         raise RuntimeError('You have to pass either cond or doc_id')
 
+    @staticmethod
+    def _make_perform_update(
+        fields: Union[Mapping, Callable[[MutableMapping], None]],
+    ) -> Callable[[dict, int], None]:
+        """
+        Build the function that applies ``fields`` to a single document.
+        """
+        if callable(fields):
+            def perform_update(table, doc_id):
+                # Update documents by calling the update function provided by
+                # the user
+                fields(table[doc_id])
+        else:
+            def perform_update(table, doc_id):
+                # Update documents by setting all fields from the provided data
+                table[doc_id].update(fields)
+
+        return perform_update
+
+    def _update_by_ids(
+        self,
+        perform_update: Callable[[dict, int], None],
+        doc_ids: Iterable[int],
+    ) -> list[int]:
+        """
+        Apply ``perform_update`` to the documents with the given IDs.
+
+        Repeated IDs are processed once and IDs that don't exist in the table
+        are silently skipped (see issue #591). The list of *actually* updated
+        IDs is determined inside the updater so it reflects the table state
+        at write time.
+        """
+        requested_ids = list(dict.fromkeys(doc_ids))
+        updated_ids: list[int] = []
+
+        def updater(table: dict):
+            # Filter to IDs that exist *before* performing any updates,
+            # so the operation is atomic: either every existing target is
+            # updated, or none is.
+            updated_ids.extend(
+                doc_id for doc_id in requested_ids if doc_id in table
+            )
+            for doc_id in updated_ids:
+                perform_update(table, doc_id)
+
+        # Perform the update operation (see _update_table for details)
+        self._update_table(updater)
+
+        return updated_ids
+
     def update(
         self,
         fields: Union[Mapping, Callable[[MutableMapping], None]],
@@ -445,40 +495,10 @@ class Table:
         """
 
         # Define the function that will perform the update
-        if callable(fields):
-            def perform_update(table, doc_id):
-                # Update documents by calling the update function provided by
-                # the user
-                fields(table[doc_id])
-        else:
-            def perform_update(table, doc_id):
-                # Update documents by setting all fields from the provided data
-                table[doc_id].update(fields)
+        perform_update = self._make_perform_update(fields)
 
         if doc_ids is not None:
-            # Perform the update operation for documents specified by a list
-            # of document IDs. Document IDs that don't exist in the table are
-            # silently skipped, mirroring the behaviour of ``get(doc_ids=...)``
-            # (see issue #591). The list of *actually* updated IDs is
-            # determined inside the updater so it reflects the table state at
-            # write time.
-            requested_ids = list(dict.fromkeys(doc_ids))
-            updated_ids: list[int] = []
-
-            def updater(table: dict):
-                # Filter to IDs that exist *before* performing any updates,
-                # so the operation is atomic: either every existing target is
-                # updated, or none is.
-                updated_ids.extend(
-                    doc_id for doc_id in requested_ids if doc_id in table
-                )
-                for doc_id in updated_ids:
-                    perform_update(table, doc_id)
-
-            # Perform the update operation (see _update_table for details)
-            self._update_table(updater)
-
-            return updated_ids
+            return self._update_by_ids(perform_update, doc_ids)
 
         elif cond is not None:
             # Perform the update operation for documents specified by a query
