@@ -1,0 +1,64 @@
+# Línea base de Ruff ruff 0.17.1 - 2026-10-21
+# Comando: ruff check tinydb tests
+# Commit base: ed9a388
+
+tests/conftest.py:1:8: F401 [*] `os.path` imported but unused
+tests/conftest.py:2:8: F401 [*] `tempfile` imported but unused
+tests/test_middlewares.py:35:9: B007 Loop control variable `x` not used within loop body
+tests/test_queries.py:41:5: E731 Do not assign a `lambda` expression, use a `def`
+tests/test_queries.py:48:5: E731 Do not assign a `lambda` expression, use a `def`
+tests/test_queries.py:226:24: E741 Ambiguous variable name: `l`
+tests/test_storages.py:125:5: SIM117 Use a single `with` statement with multiple contexts instead of nested `with` statements
+tests/test_storages.py:209:5: SIM117 [*] Use a single `with` statement with multiple contexts instead of nested `with` statements
+tests/test_storages.py:210:43: F841 Local variable `db` is assigned to but never used
+tests/test_tables.py:82:5: E731 Do not assign a `lambda` expression, use a `def`
+tests/test_tables.py:165:89: E501 Line too long (91 > 88)
+tests/test_tinydb.py:24:9: B007 Loop control variable `i` not used within loop body
+tests/test_tinydb.py:678:12: SIM300 [*] Yoda condition detected
+tests/test_tinydb.py:685:12: SIM300 [*] Yoda condition detected
+tests/test_tinydb.py:836:5: E731 Do not assign a `lambda` expression, use a `def`
+tests/test_utils.py:14:5: SIM105 Use `contextlib.suppress(KeyError)` instead of `try`-`except`-`pass`
+tests/test_utils.py:76:5: SIM105 Use `contextlib.suppress(KeyError)` instead of `try`-`except`-`pass`
+tests/test_utils.py:113:16: B011 Do not `assert False` (`python -O` removes these calls), raise `AssertionError()`
+tests/test_utils.py:121:1: W293 Blank line contains whitespace
+tests/test_utils.py:126:1: W293 [*] Blank line contains whitespace
+tests/test_utils.py:133:1: W293 [*] Blank line contains whitespace
+tests/test_utils.py:137:1: W293 [*] Blank line contains whitespace
+tinydb/__init__.py:31:22: F401 `.version.__version__` imported but unused; consider removing, adding to `__all__`, or using a redundant alias
+tinydb/database.py:106:89: E501 Line too long (109 > 88)
+tinydb/middlewares.py:5:20: F401 [*] `typing.Optional` imported but unused
+tinydb/queries.py:239:21: SIM108 Use ternary operator `value = value[part] if isinstance(part, str) else part(value)` instead of `if`-`else`-block
+tinydb/storages.py:71:5: B027 `Storage.close` is an empty method in an abstract base class, but has no abstract decorator
+tinydb/storages.py:84:89: E501 Line too long (96 > 88)
+tinydb/storages.py:109:13: B028 No explicit `stacklevel` keyword argument found
+tinydb/storages.py:116:89: E501 Line too long (103 > 88)
+tinydb/storages.py:120:24: SIM115 Use a context manager for opening files
+tinydb/storages.py:153:13: B904 Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None` to distinguish them from errors in exception handling
+tinydb/storages.py:153:89: E501 Line too long (98 > 88)
+tinydb/table.py:221:59: SIM118 [*] Use `key in dict` instead of `key in dict.keys()`
+tinydb/table.py:319:89: E501 Line too long (93 > 88)
+tinydb/table.py:427:9: C901 `update` is too complex (13 > 10)
+tinydb/table.py:770:52: SIM118 Use `key in dict` instead of `key in dict.keys()`
+Found 37 errors.
+[*] 10 fixable with `--fix` (14 unsafe fixes available with `--fix --unsafe-fixes`).
+
+6	E501  	[ ] line-too-long
+4	W293  	[-] blank-line-with-whitespace
+4	E731  	[ ] lambda-assignment
+4	F401  	[-] unused-import
+2	SIM118	[-] in-dict-keys
+2	SIM117	[-] multiple-with-statements
+2	SIM105	[ ] suppressible-exception
+2	B007  	[ ] unused-loop-control-variable
+2	SIM300	[*] yoda-conditions
+1	E741  	[ ] ambiguous-variable-name
+1	B011  	[ ] assert-false
+1	C901  	[ ] complex-structure
+1	B027  	[ ] empty-method-without-abstract-decorator
+1	SIM108	[ ] if-else-block-instead-of-if-exp
+1	B028  	[ ] no-explicit-stacklevel
+1	SIM115	[ ] open-file-with-context-handler
+1	B904  	[ ] raise-without-from-inside-except
+1	F841  	[ ] unused-variable
+Found 37 errors.
+[*] 10 fixable with `--fix` (14 unsafe fixes available with `--fix --unsafe-fixes`).

@@ -45,6 +45,15 @@ jobs:
       run: |
         uv run pytest --mypy -m mypy tinydb tests
       if: ${{ contains(matrix.python-version, '3.14') }}
+    - name: Static analysis (Ruff) - incremento del equipo
+      run: |
+        uv run --with ruff==0.17.1 ruff check tests/test_incremento_tdd.py
+      if: ${{ contains(matrix.python-version, '3.14') }}
+    - name: Static analysis (Ruff) - linea base del repositorio
+      run: |
+        uv run --with ruff==0.17.1 ruff check tinydb tests --statistics
+      continue-on-error: true
+      if: ${{ contains(matrix.python-version, '3.14') }}
     - name: Verify dist package format
       run: |
         uv build
