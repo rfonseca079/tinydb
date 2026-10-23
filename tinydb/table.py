@@ -645,7 +645,7 @@ class Table:
             # ``get(doc_ids=...)`` (see issue #591). The list of *actually*
             # removed IDs is determined inside the updater so it reflects the
             # table state at write time.
-            requested_ids = list(doc_ids)
+            requested_ids = list(dict.fromkeys(doc_ids))
             removed_ids: list[int] = []
 
             def updater(table: dict):
