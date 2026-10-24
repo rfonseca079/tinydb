@@ -133,10 +133,11 @@ class CachingMiddleware(Middleware):
         if self._closed:
             return
 
-        # Flush potentially unwritten data
-        self.flush()
-
-        # Let the storage clean up too
-        self.storage.close()
-        self._closed = True
-        self.cache = None
+        try:
+            # Flush potentially unwritten data
+            self.flush()
+        finally:
+            # Release the storage even if flushing failed
+            self.storage.close()
+            self._closed = True
+            self.cache = None
