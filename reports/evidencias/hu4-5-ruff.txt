@@ -1,0 +1,19 @@
+F401 [*] `typing.Optional` imported but unused
+ --> tinydb\middlewares.py:5:20
+  |
+3 | middlewares and implementations.
+4 | """
+5 | from typing import Optional
+  |                    ^^^^^^^^
+6 |
+7 | from tinydb import Storage
+  |
+help: Remove unused import: `typing.Optional`
+  |
+4 | """
+  - from typing import Optional
+5 |
+  |
+
+Found 1 error.
+[*] 1 fixable with `--fix`.

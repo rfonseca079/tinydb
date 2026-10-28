@@ -1,0 +1,35 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.5, pytest-9.1.1, pluggy-1.7.0
+rootdir: C:\Users\[ruta de los archivos]\tinydb
+configfile: pytest.ini
+plugins: cov-7.1.0
+collected 238 items
+
+tests\test_incremento_tdd.py ..........                                  [  4%]
+tests\test_middlewares.py .........                                      [  7%]
+tests\test_operations.py ..............                                  [ 13%]
+tests\test_queries.py ..................................                 [ 28%]
+tests\test_storages.py ..............                                    [ 34%]
+tests\test_tables.py ...............................                     [ 47%]
+tests\test_tinydb.py ................................................... [ 68%]
+...............................................................          [ 94%]
+tests\test_utils.py ............                                         [100%]
+
+=============================== tests coverage ================================
+_______________ coverage: platform win32, python 3.13.5-final-0 _______________
+
+Name                    Stmts   Miss Branch BrPart  Cover
+---------------------------------------------------------
+tinydb\__init__.py          5      0      0      0   100%
+tinydb\database.py         53      0     10      0   100%
+tinydb\middlewares.py      45      0     14      0   100%
+tinydb\mypy_plugin.py      26     26      2      0     0%
+tinydb\operations.py       26      0      0      0   100%
+tinydb\queries.py         130      2     30      4    96%
+tinydb\storages.py         57      0      8      0   100%
+tinydb\table.py           250      1    104      8    97%
+tinydb\utils.py            78      1     18      1    98%
+tinydb\version.py           1      0      0      0   100%
+---------------------------------------------------------
+TOTAL                     671     30    186     13    95%
+============================= 238 passed in 0.96s =============================

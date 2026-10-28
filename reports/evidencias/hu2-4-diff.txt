@@ -1,0 +1,19 @@
+commit e12d2a71829f2e8c6f0bf5f553cd5fe3d7814a2b
+Author: Pipe1844 <pipevifa@gmail.com>
+Date:   Thu Oct 22 23:28:52 2026 -0600
+
+    fix(table): deduplicate doc_ids in update (HU-2)
+
+diff --git a/tinydb/table.py b/tinydb/table.py
+index 7689836..7b23b74 100644
+--- a/tinydb/table.py
++++ b/tinydb/table.py
+@@ -462,7 +462,7 @@ class Table:
+             # (see issue #591). The list of *actually* updated IDs is
+             # determined inside the updater so it reflects the table state at
+             # write time.
+-            requested_ids = list(doc_ids)
++            requested_ids = list(dict.fromkeys(doc_ids))
+             updated_ids: list[int] = []
+ 
+             def updater(table: dict):

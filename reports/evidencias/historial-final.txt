@@ -1,0 +1,12 @@
+59d28d9 fix(table): update on a copy so failures leave no partial changes (HU-3)
+de00fd2 fix(middlewares): close storage even if flush fails (HU-4)
+91ea67b ci: trigger first workflow run
+7151d64 ci: run Ruff steps even when tests fail
+aa4a09f refactor(table): extract update helpers to reduce complexity (HU-2)
+e12d2a7 fix(table): deduplicate doc_ids in update (HU-2)
+6d6e292 fix(table): deduplicate doc_ids in remove (HU-1)
+58cd3f9 chore: configure Ruff and add static analysis to CI
+ed9a388 test: add increment tests before any production change
+6d7c4fc fix: do not treat str/bytes as sequences in Query.any/all (#641)
+9c861c4 build(deps): bump urllib3 from 2.7.0 to 2.8.0 (#645)
+efe9da1 docs: align docs and type hints with runtime behavior (#644)

@@ -1,0 +1,73 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.5, pytest-9.1.1, pluggy-1.7.0
+rootdir: C:\Users\[ruta de los archivos]\tinydb
+configfile: pytest.ini
+plugins: cov-7.1.0
+collected 238 items
+
+tests\test_incremento_tdd.py ....FF....                                  [  4%]
+tests\test_middlewares.py .........                                      [  7%]
+tests\test_operations.py ..............                                  [ 13%]
+tests\test_queries.py ..................................                 [ 28%]
+tests\test_storages.py ..............                                    [ 34%]
+tests\test_tables.py ...............................                     [ 47%]
+tests\test_tinydb.py ................................................... [ 68%]
+...............................................................          [ 94%]
+tests\test_utils.py ............                                         [100%]
+
+================================== FAILURES ===================================
+______ test_hu3_update_con_callable_que_falla_no_deja_cambios_parciales _______
+
+mem_db = <TinyDB tables=['_default'], tables_count=1, default_table_documents_count=3, all_tables_documents_count=['_default=3']>
+
+    def test_hu3_update_con_callable_que_falla_no_deja_cambios_parciales(mem_db):
+        antes = [dict(d) for d in mem_db.all()]
+    
+        with pytest.raises(RuntimeError):
+            mem_db.update(_falla_en_tercero)
+    
+>       assert mem_db.all() == antes
+E       AssertionError: assert [{'n': 11}, {...12}, {'n': 3}] == [{'n': 1}, {'n': 2}, {'n': 3}]
+E         
+E         At index 0 diff: {'n': 11} != {'n': 1}
+E         Use -v to get more diff
+
+tests\test_incremento_tdd.py:68: AssertionError
+____________ test_hu3_update_por_condicion_con_callable_que_falla _____________
+
+mem_db = <TinyDB tables=['_default'], tables_count=1, default_table_documents_count=3, all_tables_documents_count=['_default=3']>
+
+    def test_hu3_update_por_condicion_con_callable_que_falla(mem_db):
+        antes = [dict(d) for d in mem_db.all()]
+    
+        with pytest.raises(RuntimeError):
+            mem_db.update(_falla_en_tercero, where('n') > 0)
+    
+>       assert mem_db.all() == antes
+E       AssertionError: assert [{'n': 11}, {...12}, {'n': 3}] == [{'n': 1}, {'n': 2}, {'n': 3}]
+E         
+E         At index 0 diff: {'n': 11} != {'n': 1}
+E         Use -v to get more diff
+
+tests\test_incremento_tdd.py:77: AssertionError
+=============================== tests coverage ================================
+_______________ coverage: platform win32, python 3.13.5-final-0 _______________
+
+Name                    Stmts   Miss Branch BrPart  Cover
+---------------------------------------------------------
+tinydb\__init__.py          5      0      0      0   100%
+tinydb\database.py         53      0     10      0   100%
+tinydb\middlewares.py      45      0     14      0   100%
+tinydb\mypy_plugin.py      26     26      2      0     0%
+tinydb\operations.py       26      0      0      0   100%
+tinydb\queries.py         130      2     30      4    96%
+tinydb\storages.py         57      0      8      0   100%
+tinydb\table.py           247      1    104      8    97%
+tinydb\utils.py            78      1     18      1    98%
+tinydb\version.py           1      0      0      0   100%
+---------------------------------------------------------
+TOTAL                     668     30    186     13    95%
+=========================== short test summary info ===========================
+FAILED tests/test_incremento_tdd.py::test_hu3_update_con_callable_que_falla_no_deja_cambios_parciales
+FAILED tests/test_incremento_tdd.py::test_hu3_update_por_condicion_con_callable_que_falla
+======================== 2 failed, 236 passed in 1.02s ========================

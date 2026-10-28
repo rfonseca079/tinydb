@@ -1,0 +1,28 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.5, pytest-9.1.1, pluggy-1.7.0 -- C:\Users\[ruta de los archivos]\Python313\python.exe
+rootdir: C:\Users\[ruta de los archivos]\tinydb
+configfile: pytest.ini
+plugins: cov-7.1.0
+collecting ... collected 10 items / 8 deselected / 2 selected
+
+tests/test_incremento_tdd.py::test_hu2_update_con_ids_repetidos_devuelve_ids_unicos PASSED [ 50%]
+tests/test_incremento_tdd.py::test_hu2_update_callable_no_se_aplica_dos_veces PASSED [100%]
+
+=============================== tests coverage ================================
+_______________ coverage: platform win32, python 3.13.5-final-0 _______________
+
+Name                    Stmts   Miss Branch BrPart  Cover
+---------------------------------------------------------
+tinydb\__init__.py          5      0      0      0   100%
+tinydb\database.py         53      0     10      0   100%
+tinydb\middlewares.py      44      0     14      0   100%
+tinydb\mypy_plugin.py      26     26      2      0     0%
+tinydb\operations.py       26      0      0      0   100%
+tinydb\queries.py         130      2     30      4    96%
+tinydb\storages.py         57      0      8      0   100%
+tinydb\table.py           241      1    104      8    97%
+tinydb\utils.py            78      1     18      1    98%
+tinydb\version.py           1      0      0      0   100%
+---------------------------------------------------------
+TOTAL                     661     30    186     13    95%
+======================= 2 passed, 8 deselected in 0.14s =======================

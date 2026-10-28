@@ -1,0 +1,32 @@
+commit 59d28d9ca43023d261719104d39c1ee7a2cd0dc9
+Author: Pipe1844 <pipevifa@gmail.com>
+Date:   Fri Oct 23 21:38:35 2026 -0600
+
+    fix(table): update on a copy so failures leave no partial changes (HU-3)
+
+diff --git a/tinydb/table.py b/tinydb/table.py
+index 54f48a9..064fef1 100644
+--- a/tinydb/table.py
++++ b/tinydb/table.py
+@@ -3,6 +3,7 @@ This module implements tables, the central place for accessing and manipulating
+ data in TinyDB.
+ """
+ 
++import copy
+ from collections.abc import Callable, Iterable, Iterator, Mapping, MutableMapping
+ from typing import (
+     NoReturn,
+@@ -434,8 +435,11 @@ class Table:
+         if callable(fields):
+             def perform_update(table, doc_id):
+                 # Update documents by calling the update function provided by
+-                # the user
+-                fields(table[doc_id])
++                # the user. The function works on a copy so a failure leaves
++                # the stored document untouched.
++                doc = copy.deepcopy(table[doc_id])
++                fields(doc)
++                table[doc_id] = doc
+         else:
+             def perform_update(table, doc_id):
+                 # Update documents by setting all fields from the provided data

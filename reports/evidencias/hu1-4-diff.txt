@@ -1,0 +1,19 @@
+commit 6d6e292945b9f27f587108faedf9740bcb8016b5
+Author: Pipe1844 <pipevifa@gmail.com>
+Date:   Thu Oct 22 23:15:33 2026 -0600
+
+    fix(table): deduplicate doc_ids in remove (HU-1)
+
+diff --git a/tinydb/table.py b/tinydb/table.py
+index 76470aa..7689836 100644
+--- a/tinydb/table.py
++++ b/tinydb/table.py
+@@ -645,7 +645,7 @@ class Table:
+             # ``get(doc_ids=...)`` (see issue #591). The list of *actually*
+             # removed IDs is determined inside the updater so it reflects the
+             # table state at write time.
+-            requested_ids = list(doc_ids)
++            requested_ids = list(dict.fromkeys(doc_ids))
+             removed_ids: list[int] = []
+ 
+             def updater(table: dict):

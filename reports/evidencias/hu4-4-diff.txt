@@ -1,0 +1,29 @@
+commit de00fd201c8a2c83c7a6f4afd7dff6b86965a6b6
+Author: Pipe1844 <pipevifa@gmail.com>
+Date:   Fri Oct 23 20:39:06 2026 -0600
+
+    fix(middlewares): close storage even if flush fails (HU-4)
+
+diff --git a/tinydb/middlewares.py b/tinydb/middlewares.py
+index ba6a6c2..63c5f6d 100644
+--- a/tinydb/middlewares.py
++++ b/tinydb/middlewares.py
+@@ -133,10 +133,11 @@ class CachingMiddleware(Middleware):
+         if self._closed:
+             return
+ 
+-        # Flush potentially unwritten data
+-        self.flush()
+-
+-        # Let the storage clean up too
+-        self.storage.close()
+-        self._closed = True
+-        self.cache = None
++        try:
++            # Flush potentially unwritten data
++            self.flush()
++        finally:
++            # Release the storage even if flushing failed
++            self.storage.close()
++            self._closed = True
++            self.cache = None

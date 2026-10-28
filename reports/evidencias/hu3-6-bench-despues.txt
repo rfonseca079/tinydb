@@ -1,0 +1,2 @@
+N=  1000 | update 1 doc:    0.133 ms | update todos:     2.677 ms | insert:    0.130 ms | remove 1:    0.129 ms
+N= 10000 | update 1 doc:    1.494 ms | update todos:    27.339 ms | insert:    1.519 ms | remove 1:    1.500 ms

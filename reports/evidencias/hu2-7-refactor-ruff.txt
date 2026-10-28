@@ -1,0 +1,47 @@
+SIM118 [*] Use `key in dict` instead of `key in dict.keys()`
+   --> tinydb\table.py:221:59
+    |
+219 |                     if table:
+220 |                         next_id = max(
+221 |                             self.document_id_class(i) for i in table.keys()
+    |                                                           ^^^^^^^^^^^^^^^^^
+222 |                         ) + 1
+223 |                     else:
+    |
+help: Remove `.keys()`
+    |
+220 |                         next_id = max(
+    -                             self.document_id_class(i) for i in table.keys()
+221 +                             self.document_id_class(i) for i in table
+222 |                         ) + 1
+    |
+
+E501 Line too long (93 > 88)
+   --> tinydb\table.py:319:89
+    |
+317 |     @overload
+318 |     def get(
+319 |         self, *, cond: Optional[QueryLike] = ..., doc_id: int, doc_ids: Optional[list] = ...,
+    |                                                                                         ^^^^^
+320 |     ) -> Optional[Document]: ...
+    |
+
+SIM118 Use `key in dict` instead of `key in dict.keys()`
+   --> tinydb\table.py:790:52
+    |
+789 |         # Determine the next ID based on the maximum ID that's currently in use
+790 |         max_id = max(self.document_id_class(i) for i in table.keys())
+    |                                                    ^^^^^^^^^^^^^^^^^
+791 |         next_id = max_id + 1
+    |
+help: Remove `.keys()`
+    |
+789 |         # Determine the next ID based on the maximum ID that's currently in use
+    -         max_id = max(self.document_id_class(i) for i in table.keys())
+790 +         max_id = max(self.document_id_class(i) for i in table)
+791 |         next_id = max_id + 1
+    |
+note: This is an unsafe fix and may change runtime behavior
+
+Found 3 errors.
+[*] 1 fixable with `--fix` (1 unsafe fix available with `--fix --unsafe-fixes`).

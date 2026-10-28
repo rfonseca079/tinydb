@@ -1,0 +1,130 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.5, pytest-9.1.1, pluggy-1.7.0
+rootdir: C:\Users\[ruta de los archivos]\tinydb
+configfile: pytest.ini
+plugins: cov-7.1.0
+collected 238 items
+
+tests\test_incremento_tdd.py ..FFFF.F..                                  [  4%]
+tests\test_middlewares.py .........                                      [  7%]
+tests\test_operations.py ..............                                  [ 13%]
+tests\test_queries.py ..................................                 [ 28%]
+tests\test_storages.py ..............                                    [ 34%]
+tests\test_tables.py ...............................                     [ 47%]
+tests\test_tinydb.py ................................................... [ 68%]
+...............................................................          [ 94%]
+tests\test_utils.py ............                                         [100%]
+
+================================== FAILURES ===================================
+____________ test_hu2_update_con_ids_repetidos_devuelve_ids_unicos ____________
+
+mem_db = <TinyDB tables=['_default'], tables_count=1, default_table_documents_count=3, all_tables_documents_count=['_default=3']>
+
+    def test_hu2_update_con_ids_repetidos_devuelve_ids_unicos(mem_db):
+        updated = mem_db.update({'n': 0}, doc_ids=[1, 1, 2])
+    
+>       assert updated == [1, 2]
+E       assert [1, 1, 2] == [1, 2]
+E         
+E         At index 1 diff: 1 != 2
+E         Left contains one more item: 2
+E         Use -v to get more diff
+
+tests\test_incremento_tdd.py:42: AssertionError
+_______________ test_hu2_update_callable_no_se_aplica_dos_veces _______________
+
+mem_db = <TinyDB tables=['_default'], tables_count=1, default_table_documents_count=3, all_tables_documents_count=['_default=3']>
+
+    def test_hu2_update_callable_no_se_aplica_dos_veces(mem_db):
+        def incrementar(doc):
+            doc['n'] += 1
+    
+        mem_db.update(incrementar, doc_ids=[1, 1])
+    
+>       assert mem_db.get(doc_id=1) == {'n': 2}  # 1 + 1, no 1 + 2
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: assert {'n': 3} == {'n': 2}
+E         
+E         Differing items:
+E         {'n': 3} != {'n': 2}
+E         Use -v to get more diff
+
+tests\test_incremento_tdd.py:51: AssertionError
+______ test_hu3_update_con_callable_que_falla_no_deja_cambios_parciales _______
+
+mem_db = <TinyDB tables=['_default'], tables_count=1, default_table_documents_count=3, all_tables_documents_count=['_default=3']>
+
+    def test_hu3_update_con_callable_que_falla_no_deja_cambios_parciales(mem_db):
+        antes = [dict(d) for d in mem_db.all()]
+    
+        with pytest.raises(RuntimeError):
+            mem_db.update(_falla_en_tercero)
+    
+>       assert mem_db.all() == antes
+E       AssertionError: assert [{'n': 11}, {...12}, {'n': 3}] == [{'n': 1}, {'n': 2}, {'n': 3}]
+E         
+E         At index 0 diff: {'n': 11} != {'n': 1}
+E         Use -v to get more diff
+
+tests\test_incremento_tdd.py:68: AssertionError
+____________ test_hu3_update_por_condicion_con_callable_que_falla _____________
+
+mem_db = <TinyDB tables=['_default'], tables_count=1, default_table_documents_count=3, all_tables_documents_count=['_default=3']>
+
+    def test_hu3_update_por_condicion_con_callable_que_falla(mem_db):
+        antes = [dict(d) for d in mem_db.all()]
+    
+        with pytest.raises(RuntimeError):
+            mem_db.update(_falla_en_tercero, where('n') > 0)
+    
+>       assert mem_db.all() == antes
+E       AssertionError: assert [{'n': 11}, {...12}, {'n': 3}] == [{'n': 1}, {'n': 2}, {'n': 3}]
+E         
+E         At index 0 diff: {'n': 11} != {'n': 1}
+E         Use -v to get more diff
+
+tests\test_incremento_tdd.py:77: AssertionError
+_____________ test_hu4_close_libera_el_archivo_si_el_flush_falla ______________
+
+tmp_path = WindowsPath('C:/Users/[ruta de los archivos]/pytest-2/test_hu4_close_libera_el_archi0')
+
+    def test_hu4_close_libera_el_archivo_si_el_flush_falla(tmp_path):
+        path = str(tmp_path / 'cache.json')
+        db = TinyDB(path, storage=CachingMiddleware(JSONStorage))
+        db.insert({'bad': {1, 2}})  # un set no es serializable a JSON
+    
+        with pytest.raises(TypeError):
+            db.close()
+    
+>       assert db._storage.storage._handle.closed
+E       AssertionError: assert False
+E        +  where False = <_io.TextIOWrapper name='C:\\Users\\[ruta de los archivos]\\pytest-2\\test_hu4_close_libera_el_archi0\\cache.json' mode='r+' encoding='cp1252'>.closed
+E        +    where <_io.TextIOWrapper name='C:\\Users\\[ruta de los archivos]\\pytest-2\\test_hu4_close_libera_el_archi0\\cache.json' mode='r+' encoding='cp1252'> = <tinydb.storages.JSONStorage object at 0x000001D43450CD70>._handle
+E        +      where <tinydb.storages.JSONStorage object at 0x000001D43450CD70> = <tinydb.middlewares.CachingMiddleware object at 0x000001D43450CC20>.storage
+E        +        where <tinydb.middlewares.CachingMiddleware object at 0x000001D43450CC20> = <TinyDB tables=['_default'], tables_count=1, default_table_documents_count=1, all_tables_documents_count=['_default=1']>._storage
+
+tests\test_incremento_tdd.py:104: AssertionError
+=============================== tests coverage ================================
+_______________ coverage: platform win32, python 3.13.5-final-0 _______________
+
+Name                    Stmts   Miss Branch BrPart  Cover
+---------------------------------------------------------
+tinydb\__init__.py          5      0      0      0   100%
+tinydb\database.py         53      0     10      0   100%
+tinydb\middlewares.py      44      0     14      0   100%
+tinydb\mypy_plugin.py      26     26      2      0     0%
+tinydb\operations.py       26      0      0      0   100%
+tinydb\queries.py         130      2     30      4    96%
+tinydb\storages.py         57      0      8      0   100%
+tinydb\table.py           241      1    104      8    97%
+tinydb\utils.py            78      1     18      1    98%
+tinydb\version.py           1      0      0      0   100%
+---------------------------------------------------------
+TOTAL                     661     30    186     13    95%
+=========================== short test summary info ===========================
+FAILED tests/test_incremento_tdd.py::test_hu2_update_con_ids_repetidos_devuelve_ids_unicos
+FAILED tests/test_incremento_tdd.py::test_hu2_update_callable_no_se_aplica_dos_veces
+FAILED tests/test_incremento_tdd.py::test_hu3_update_con_callable_que_falla_no_deja_cambios_parciales
+FAILED tests/test_incremento_tdd.py::test_hu3_update_por_condicion_con_callable_que_falla
+FAILED tests/test_incremento_tdd.py::test_hu4_close_libera_el_archivo_si_el_flush_falla
+======================== 5 failed, 233 passed in 1.33s ========================

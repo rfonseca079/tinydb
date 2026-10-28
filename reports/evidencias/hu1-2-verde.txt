@@ -1,0 +1,28 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.5, pytest-9.1.1, pluggy-1.7.0 -- C:\Users\[ruta de los archivos]\Python313\python.exe
+rootdir: C:\Users\[ruta de los archivos]\tinydb
+configfile: pytest.ini
+plugins: cov-7.1.0
+collecting ... collected 10 items / 8 deselected / 2 selected
+
+tests/test_incremento_tdd.py::test_hu1_remove_con_ids_repetidos_no_lanza_error PASSED [ 50%]
+tests/test_incremento_tdd.py::test_hu1_remove_con_ids_repetidos_y_ausentes PASSED [100%]
+
+=============================== tests coverage ================================
+_______________ coverage: platform win32, python 3.13.5-final-0 _______________
+
+Name                    Stmts   Miss Branch BrPart  Cover
+---------------------------------------------------------
+tinydb\__init__.py          5      0      0      0   100%
+tinydb\database.py         53     15     10      0    63%
+tinydb\middlewares.py      44     31     14      0    22%
+tinydb\mypy_plugin.py      26     26      2      0     0%
+tinydb\operations.py       26     26      0      0     0%
+tinydb\queries.py         130     89     30      2    27%
+tinydb\storages.py         57     29      8      0    43%
+tinydb\table.py           241    131    104     15    39%
+tinydb\utils.py            78     37     18      1    44%
+tinydb\version.py           1      0      0      0   100%
+---------------------------------------------------------
+TOTAL                     661    384    186     18    36%
+======================= 2 passed, 8 deselected in 0.14s =======================

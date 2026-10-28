@@ -1,0 +1,56 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.5, pytest-9.1.1, pluggy-1.7.0 -- C:\Users\[ruta de los archivos]\Python313\python.exe
+rootdir: C:\Users\[ruta de los archivos]\tinydb
+configfile: pytest.ini
+plugins: cov-7.1.0
+collecting ... collected 10 items / 7 deselected / 3 selected
+
+tests/test_incremento_tdd.py::test_hu4_close_libera_el_archivo_si_el_flush_falla FAILED [ 33%]
+tests/test_incremento_tdd.py::test_hu4_write_y_flush_tras_cierre_son_rechazados PASSED [ 66%]
+tests/test_incremento_tdd.py::test_hu4_close_es_idempotente PASSED       [100%]
+
+================================== FAILURES ===================================
+_____________ test_hu4_close_libera_el_archivo_si_el_flush_falla ______________
+
+tmp_path = WindowsPath('C:/Users/[ruta de los archivos]/pytest-6/test_hu4_close_libera_el_archi0')
+
+    def test_hu4_close_libera_el_archivo_si_el_flush_falla(tmp_path):
+        path = str(tmp_path / 'cache.json')
+        db = TinyDB(path, storage=CachingMiddleware(JSONStorage))
+        db.insert({'bad': {1, 2}})  # un set no es serializable a JSON
+    
+        with pytest.raises(TypeError):
+            db.close()
+    
+>       assert db._storage.storage._handle.closed
+E       AssertionError: assert False
+E        +  where False = <_io.TextIOWrapper name='C:\\Users\\[ruta de los archivos]\\pytest-6\\test_hu4_close_libera_el_archi0\\cache.json' mode='r+' encoding='cp1252'>.closed
+E        +    where <_io.TextIOWrapper name='C:\\Users\\[ruta de los archivos]\\pytest-6\\test_hu4_close_libera_el_archi0\\cache.json' mode='r+' encoding='cp1252'> = <tinydb.storages.JSONStorage object at 0x0000025240E3F4D0>._handle
+E        +      where <tinydb.storages.JSONStorage object at 0x0000025240E3F4D0> = <tinydb.middlewares.CachingMiddleware object at 0x0000025240E3F230>.storage
+E        +        where <tinydb.middlewares.CachingMiddleware object at 0x0000025240E3F230> = <TinyDB tables=['_default'], tables_count=1, default_table_documents_count=1, all_tables_documents_count=['_default=1']>._storage
+
+tests\test_incremento_tdd.py:104: AssertionError
+=============================== tests coverage ================================
+_______________ coverage: platform win32, python 3.13.5-final-0 _______________
+
+Name                    Stmts   Miss Branch BrPart  Cover
+---------------------------------------------------------
+tinydb\__init__.py          5      0      0      0   100%
+tinydb\database.py         53      0     10      0   100%
+tinydb\middlewares.py      44      0     14      0   100%
+tinydb\mypy_plugin.py      26     26      2      0     0%
+tinydb\operations.py       26      0      0      0   100%
+tinydb\queries.py         130      2     30      4    96%
+tinydb\storages.py         57      0      8      0   100%
+tinydb\table.py           247      1    104      8    97%
+tinydb\utils.py            78      1     18      1    98%
+tinydb\version.py           1      0      0      0   100%
+---------------------------------------------------------
+TOTAL                     667     30    186     13    95%
+=========================== short test summary info ===========================
+FAILED tests/test_incremento_tdd.py::test_hu4_close_libera_el_archivo_si_el_flush_falla - AssertionError: assert False
+ +  where False = <_io.TextIOWrapper name='C:\\Users\\[ruta de los archivos]\\pytest-6\\test_hu4_close_libera_el_archi0\\cache.json' mode='r+' encoding='cp1252'>.closed
+ +    where <_io.TextIOWrapper name='C:\\Users\\[ruta de los archivos]\\pytest-6\\test_hu4_close_libera_el_archi0\\cache.json' mode='r+' encoding='cp1252'> = <tinydb.storages.JSONStorage object at 0x0000025240E3F4D0>._handle
+ +      where <tinydb.storages.JSONStorage object at 0x0000025240E3F4D0> = <tinydb.middlewares.CachingMiddleware object at 0x0000025240E3F230>.storage
+ +        where <tinydb.middlewares.CachingMiddleware object at 0x0000025240E3F230> = <TinyDB tables=['_default'], tables_count=1, default_table_documents_count=1, all_tables_documents_count=['_default=1']>._storage
+================== 1 failed, 2 passed, 7 deselected in 0.24s ==================

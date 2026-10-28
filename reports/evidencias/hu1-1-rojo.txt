@@ -1,0 +1,101 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.5, pytest-9.1.1, pluggy-1.7.0 -- C:\Users\[ruta de los archivos]\Python313\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\[ruta de los archivos]\tinydb
+configfile: pytest.ini
+plugins: cov-7.1.0
+collecting ... collected 10 items / 8 deselected / 2 selected
+
+tests/test_incremento_tdd.py::test_hu1_remove_con_ids_repetidos_no_lanza_error FAILED [ 50%]
+tests/test_incremento_tdd.py::test_hu1_remove_con_ids_repetidos_y_ausentes FAILED [100%]
+
+================================== FAILURES ===================================
+______________ test_hu1_remove_con_ids_repetidos_no_lanza_error _______________
+
+mem_db = <TinyDB tables=['_default'], tables_count=1, default_table_documents_count=3, all_tables_documents_count=['_default=3']>
+
+    def test_hu1_remove_con_ids_repetidos_no_lanza_error(mem_db):
+>       removed = mem_db.remove(doc_ids=[1, 1])
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_incremento_tdd.py:24: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tinydb\table.py:662: in remove
+    self._update_table(updater)
+tinydb\table.py:840: in _update_table
+    updater(table)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+table = {2: {'n': 2}, 3: {'n': 3}}
+
+    def updater(table: dict):
+        # Filter to IDs that exist *before* performing any removals,
+        # so the operation is atomic: either every existing target is
+        # removed, or none is.
+        removed_ids.extend(
+            doc_id for doc_id in requested_ids if doc_id in table
+        )
+        for doc_id in removed_ids:
+>           del table[doc_id]
+                ^^^^^^^^^^^^^
+E           KeyError: 1
+
+tinydb\table.py:659: KeyError
+________________ test_hu1_remove_con_ids_repetidos_y_ausentes _________________
+
+mem_db = <TinyDB tables=['_default'], tables_count=1, default_table_documents_count=3, all_tables_documents_count=['_default=3']>
+
+    def test_hu1_remove_con_ids_repetidos_y_ausentes(mem_db):
+>       removed = mem_db.remove(doc_ids=[2, 2, 99, 2])
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_incremento_tdd.py:31: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tinydb\table.py:662: in remove
+    self._update_table(updater)
+tinydb\table.py:840: in _update_table
+    updater(table)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+table = {1: {'n': 1}, 3: {'n': 3}}
+
+    def updater(table: dict):
+        # Filter to IDs that exist *before* performing any removals,
+        # so the operation is atomic: either every existing target is
+        # removed, or none is.
+        removed_ids.extend(
+            doc_id for doc_id in requested_ids if doc_id in table
+        )
+        for doc_id in removed_ids:
+>           del table[doc_id]
+                ^^^^^^^^^^^^^
+E           KeyError: 2
+
+tinydb\table.py:659: KeyError
+============================== warnings summary ===============================
+[ruta de los archivos]\Python313\Lib\site-packages\_pytest\cacheprovider.py:469
+  C:\Users\[ruta de los archivos]\Python313\Lib\site-packages\_pytest\cacheprovider.py:469: PytestCacheWarning: could not create cache path C:\Users\[ruta de los archivos]\tinydb\.pytest_cache\v\cache\nodeids: [WinError 5] Acceso denegado: 'C:\\Users\\[ruta de los archivos]\\tinydb\\pytest-cache-files-oleqgr6e' -> 'C:\\Users\\[ruta de los archivos]\\tinydb\\.pytest_cache'
+    config.cache.set("cache/nodeids", sorted(self.cached_nodeids))
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=============================== tests coverage ================================
+_______________ coverage: platform win32, python 3.13.5-final-0 _______________
+
+Name                    Stmts   Miss Branch BrPart  Cover
+---------------------------------------------------------
+tinydb\__init__.py          5      0      0      0   100%
+tinydb\database.py         53     15     10      0    63%
+tinydb\middlewares.py      44     31     14      0    22%
+tinydb\mypy_plugin.py      26     26      2      0     0%
+tinydb\operations.py       26     26      0      0     0%
+tinydb\queries.py         130     89     30      2    27%
+tinydb\storages.py         57     29      8      0    43%
+tinydb\table.py           241    137    104     16    37%
+tinydb\utils.py            78     37     18      1    44%
+tinydb\version.py           1      0      0      0   100%
+---------------------------------------------------------
+TOTAL                     661    390    186     19    35%
+=========================== short test summary info ===========================
+FAILED tests/test_incremento_tdd.py::test_hu1_remove_con_ids_repetidos_no_lanza_error - KeyError: 1
+FAILED tests/test_incremento_tdd.py::test_hu1_remove_con_ids_repetidos_y_ausentes - KeyError: 2
+================= 2 failed, 8 deselected, 1 warning in 0.20s ==================
